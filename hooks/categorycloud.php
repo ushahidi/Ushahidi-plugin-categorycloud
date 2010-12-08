@@ -32,6 +32,9 @@
       {
           if (Router::$controller == 'main')
           {
+              // Add stylesheet
+              plugin::add_stylesheet('categorycloud/views/css/categorycloud');
+              
               Event::add('ushahidi_action.main_sidebar', array($this, '_generate_cloud'));
           }
       }
@@ -88,11 +91,11 @@
                   : $max_frequency;
           }
                     
-          // Generate the tag cloud
-          $tag_cloud_html = '<div class="clearingfix"></div>';
-          $tag_cloud_html .= '<div style="width: 100%; height: auto; margin-top:30px; ">';
-          $tag_cloud_html .= '<h5>Category Cloud</h5>';
-          
+          // Load the tag could view
+          $view =  View::factory('categorycloud/tagcloud');
+          $view->cloud_title = 'Category Cloud';
+
+          $tag_cloud_items = array();
           foreach ($category_items as $item)
           {
               // Get the current frequency
@@ -101,15 +104,18 @@
               // Get the font size of the cloud item
               $font_size = ($this->_calculate_font_size($frequency, $max_frequency, $min_frequency));
               
-              // Generate the html
-              $tag_cloud_html .= '<span style="padding:0px 10px;">';
-              $tag_cloud_html .= '<a href="'.url::base().'reports/index/c?='.(int)$item->id.'" style="font-size:'.$font_size.'px; font-weight:bold; color: #'.$item->category_color.'">'.$item->category_title.'</a>';
-              $tag_cloud_html .= '</span>';
+              // Populate the $tag_cloud_items array
+              $tag_cloud_items[] = array(
+                    'id' => $item->id,
+                    'category_title' => $item->category_title,
+                    'css' => 'color: #'.$item->category_color.'; font-size: '.$font_size.'px;'
+                  );
           }
           
-          $tag_cloud_html .= '</div>';
+          // Set the tag cloud items
+          $view->cloud_items = $tag_cloud_items;
           
-          echo $tag_cloud_html;
+          $view->render(TRUE);
       }
       
       /**

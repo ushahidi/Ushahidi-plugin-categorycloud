@@ -1,0 +1,13 @@
+div#tagcloud {
+	margin: 15px 0px;
+	padding: 10px ;
+	background-color: #f0f0f0;
+}
+
+div#tagcloud span {
+	padding: 0px 10px;
+}
+
+div#tagcloud a {
+	font-weight: bold;
+}

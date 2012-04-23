@@ -123,6 +123,11 @@
        */
       private function _calculate_font_size($cur_frequency, $max_frequency, $min_frequency)
       {
+          if ($max_frequency - $min_frequency === 0)
+          {
+                return $this->min_font_size;
+          }
+
           // Calculate the weight using a power law - consider switching to a logarithmic one
           $weight = ($cur_frequency - $min_frequency)/($max_frequency - $min_frequency);
           
